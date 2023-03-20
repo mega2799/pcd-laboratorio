@@ -1,16 +1,24 @@
 package pcd.lab03.sem.ex;
 
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Unsynchronized version
  * 
- * @TODO make it sync 
+ 
  * @author aricci
  *
  */
 public class TestPingPong {
 	public static void main(String[] args) {
-		new Pinger().start();
-		new Ponger().start();	
+		Semaphore ping = new Semaphore(0, true);
+		Semaphore pong = new Semaphore(0, true);
+		new Pinger(ping, pong).start();
+		new Ponger(ping, pong).start();	
+
+		ping.release();
 	}
 
 }

@@ -1,17 +1,27 @@
 package pcd.lab03.sem.ex;
 
+import java.util.concurrent.Semaphore;
+
 public class Ponger extends Thread {
 	
-	public Ponger() {
-	}	
-	
+	private Semaphore pingDone;
+	private Semaphore pongDone;
+
+	public Ponger(Semaphore pingDone, Semaphore pongDonSemaphore) {
+		this.pongDone = pongDonSemaphore;
+		this.pingDone = pingDone;
+	}
+
 	public void run() {
 		while (true) {
-			try {
-				System.out.println("pong!");
-			} catch (Exception ex) {
-				ex.printStackTrace();
+				try {
+					pingDone.acquire();
+					this.sleep(1000);
+					System.out.println("pong!");
+					pongDone.release();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				} 					
 			}
-		}
 	}
 }
